@@ -1,0 +1,28 @@
+= mobile_detect
+
+* {Homepage}[https://github.com/ktaragorn/mobile_detect#readme]
+* {Issues}[https://github.com/ktaragorn/mobile_detect/issues]
+* {Documentation}[http://rubydoc.info/gems/mobile_detect/frames]
+* {Email}[mailto:karthikt.holmes+github at gmail.com]
+
+== Description
+
+TODO: Description
+
+== Features
+
+== Examples
+
+  require 'mobile_detect'
+
+== Requirements
+
+== Install
+
+  $ gem install mobile_detect
+
+== Copyright
+
+Copyright (c) 2014 Karthik T
+
+See LICENSE.txt for details.
