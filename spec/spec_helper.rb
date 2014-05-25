@@ -1,4 +1,2 @@
 require 'rspec'
-require 'mobile_detect/version'
-
-include MobileDetect
+require 'mobile_detect'
