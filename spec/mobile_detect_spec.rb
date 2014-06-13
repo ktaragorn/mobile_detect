@@ -7,7 +7,7 @@ describe MobileDetect do
   end
 
   describe "Loading json data, Initialization" do
-    let(:detect) {MobileDetect.new("",{})}
+    let(:detect) {MobileDetect.new({},{})}
 
     it "can load the json data file" do
       expect(detect.data).to be_a(Hash)
@@ -26,7 +26,7 @@ describe MobileDetect do
 
     it "initializes headers properly," do
       #  only HTTP_* is this provided this way?
-      expect(detect.headers).to be_a Hash
+      expect(detect.http_headers).to be_a Hash
     end
   end
 end

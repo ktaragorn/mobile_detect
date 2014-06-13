@@ -15,9 +15,10 @@ class MobileDetect
 
 
 
-  #UNIMPLEMENTED - incomplete data, property hash not provided
+  #UNIMPLEMENTED - incomplete data, property hash and utilities hash not provided
   # version , prepareVersionNo
   # mobileGrade
+  # detection mode
 
 private
     def load_json_data
@@ -33,6 +34,14 @@ private
     # Parse the headers for the user agent - uses a list of possible keys as provided by upstream
     # @return (String) A concatenated list of possible user agents, should be just 1
     def parse_headers_for_user_agent
-      ua_http_headers.map{|header| http_headers[header]}.compact.join " "
+      ua_http_headers.map{|header| http_headers[header]}.compact.join(" ").strip
     end
+
+    [:phones, :tablets, :browsers, [:os, :operating_systems]].each do |(key,func)|
+      func ||=key
+      define_method :func do
+        data["uaMatch"][key]
+      end
+    end
+
 end
