@@ -18,7 +18,7 @@ class MobileDetect
   #UNIMPLEMENTED - incomplete data, property hash and utilities hash not provided
   # version , prepareVersionNo
   # mobileGrade
-  # detection mode
+  # detection mode (deprecated in MobileDetect)
 
 private
     def load_json_data
@@ -42,6 +42,30 @@ private
       define_method :func do
         data["uaMatch"][key]
       end
+    end
+
+    def rules
+      @rules ||= phones + tablets + browsers + operating_systems
+    end
+
+    # Check the HTTP headers for signs of mobile.
+    # This is the fastest mobile check possible; it's used
+    # inside isMobile() method.
+    #
+    # @return bool
+    def check_http_headers_for_mobile
+      data["headerMatch"].each do |mobile_header, match_type|
+        if(http_headers[mobile_header])
+          return false if match_type.nil? || !match_type["matches"].is_a?(Array)
+
+          Array(match_type["matches"]).each do |match|
+            return true if http_headers[mobile_header].include? match
+          end
+
+          return false
+        end
+      end
+      false
     end
 
 end
