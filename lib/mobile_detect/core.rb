@@ -9,9 +9,9 @@ class MobileDetect
   #                        from the http_headers hash instead.
 
   def initialize(http_headers, user_agent = nil)
+    @data = load_json_data
     @http_headers = http_headers.select{|header| header.start_with? "HTTP_"}
     @user_agent = user_agent || parse_headers_for_user_agent
-    @data = load_json_data
   end
 
 
