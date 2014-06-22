@@ -1,6 +1,7 @@
 require 'json'
 class MobileDetect
-  attr_reader :user_agent, :http_headers, :data
+  attr_reader :http_headers, :data
+  attr_accessor :user_agent
 
   # Construct an instance of this class.
   # @param [hash] http_headers Specify the http headers of the request.
@@ -8,7 +9,7 @@ class MobileDetect
   #                        from the http_headers hash instead.
 
   def initialize(http_headers, user_agent = nil)
-    @http_headers = http_headers #.select{|header| header.start_with? "HTTP_"}
+    @http_headers = http_headers.select{|header| header.start_with? "HTTP_"}
     @user_agent = user_agent || parse_headers_for_user_agent
     @data = load_json_data
   end
@@ -68,4 +69,9 @@ private
       false
     end
 
+    def match regex, ua_string = user_agent
+      # Escape the special character which is the delimiter.
+      regex.gsub!("/", "\/")
+      !! ua_string =~ /#{regex}/
+    end
 end

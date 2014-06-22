@@ -1,5 +1,6 @@
 require 'spec_helper'
 require 'mobile_detect'
+require "pry"
 
 describe MobileDetect do
   it "should have a VERSION constant" do
@@ -27,6 +28,32 @@ describe MobileDetect do
     it "initializes headers properly," do
       #  only HTTP_* is this provided this way?
       expect(detect.http_headers).to be_a Hash
+    end
+  end
+
+  let(:detector) { MobileDetect.new({})}
+  let(:user_agents){ JSON.load(File.open("spec/ualist.json", "r"))["user_agents"]}
+  it "detects the UA string correctly" do
+    user_agents.each do |test|
+      detector.user_agent = test["user_agent"]
+
+      # Not sure why, but skip ones that have model
+      # Copied comment over
+      # Currently not supporting version and model here.
+      # @todo: I need to split this tests!
+
+      next if test.key? "model"
+
+      # version key not supported cuz hash not provided
+
+      if test.key? "mobile"
+        expect(detector.mobile?).to equal test["mobile"]
+      end
+
+      if test.key? "tablet"
+        expect(detector.tablet?).to equal test["mobile"]
+      end
+
     end
   end
 end
