@@ -3,7 +3,7 @@
 require File.expand_path('../lib/mobile_detect/version', __FILE__)
 
 Gem::Specification.new do |gem|
-  gem.name          = "mobile_detect"
+  gem.name          = "mobile-detect"
   gem.version       = MobileDetect::VERSION
   gem.summary       = %q{Library to detect if the request is made from a mobile device, tablet, etc}
   gem.description   = %q{Ruby version of a php library of the same name - http://mobiledetect.net/. Intended to be a nearly complete port, sharing data exposed by the php library}
