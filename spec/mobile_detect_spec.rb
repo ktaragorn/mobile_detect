@@ -32,28 +32,22 @@ describe MobileDetect do
 
   describe "Testing the User Agent" do
     let(:detector) { MobileDetect.new({})}
-    let(:user_agents){ JSON.load(File.open("spec/ualist.json", "r"))["user_agents"]}
-    it "detects the UA string correctly" do
-      user_agents.each do |test|
+    user_agents = JSON.load(File.open("spec/ualist.json", "r"))["user_agents"]
+
+    user_agents.each do |test|
+      # Not sure why, but skip ones that have model
+      # Copied comment over
+      # Currently not supporting version and model here.
+      # @todo: I need to split this tests!?
+
+      next if test.key? "model"
+
+      it "detects the UA string correctly for UA - #{test["user_agent"]}" do
         detector.user_agent = test["user_agent"]
 
-        # Not sure why, but skip ones that have model
-        # Copied comment over
-        # Currently not supporting version and model here.
-        # @todo: I need to split this tests!
-
-        next if test.key? "model"
-
         # version key not supported cuz hash not provided
-
-        if test.key? "mobile"
-          expect(detector.mobile?).to equal test["mobile"]
-        end
-
-        if test.key? "tablet"
-          expect(detector.tablet?).to equal test["mobile"]
-        end
-
+        expect(detector.mobile?).to eq test["mobile"] if test.key? "mobile"
+        expect(detector.tablet?).to eq test["tablet"] if test.key? "tablet"
       end
     end
   end
