@@ -59,9 +59,9 @@ class MobileDetect
     # Make the keys lowercase so we can match: is?("Iphone"), is?("iPhone"), is?("iphone"), etc.
     key = key.downcase
 
-    lc_rules = rules.map do |k, v|
+    lc_rules = Hash[rules.map do |k, v|
       [k.downcase, v.downcase]
-    end.to_h
+    end]
 
     unless lc_rules[key]
       raise NoMethodError, "Provided key, #{key}, is invalid"
