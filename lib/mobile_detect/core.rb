@@ -1,7 +1,7 @@
 require 'json'
 
 class MobileDetect
-  attr_reader :http_headers, :data
+  attr_reader :http_headers
   attr_writer :user_agent
 
   # Construct an instance of this class.
@@ -10,9 +10,13 @@ class MobileDetect
   #                        from the http_headers hash instead.
 
   def initialize(http_headers = {}, user_agent = nil)
-    @data = load_json_data
+    @@data ||= load_json_data
     self.http_headers = http_headers
     self.user_agent = user_agent
+  end
+
+  def data
+    @@data
   end
 
   #UNIMPLEMENTED - incomplete data, property hash and utilities hash not provided
@@ -87,7 +91,7 @@ class MobileDetect
 
 private
     def load_json_data
-      File.open("data/Mobile_Detect.json", "r") do |file|
+      File.open(File.expand_path("../../../data/Mobile_Detect.json", __FILE__), "r") do |file|
         JSON.load(file)
       end
     end

@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'mobile_detect'
 
 describe MobileDetect do
   it "should have a VERSION constant" do
