@@ -94,7 +94,7 @@ private
       # Escape the special character which is the delimiter.
       _, regex = key_regex
       regex.gsub!("/", "\/")
-      !! ua_string =~ /#{regex}/
+      !! (ua_string =~ /#{regex}/is)
     end
 
     #Find a detection rule that matches the current User-agent.
