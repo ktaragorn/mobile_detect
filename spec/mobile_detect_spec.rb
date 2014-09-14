@@ -30,6 +30,66 @@ describe MobileDetect do
     end
   end
 
+  describe "Test basic methods" do
+    let(:test_ua){"'Mozilla/5.0 (iPhone; CPU iPhone OS 6_0_1 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A523 Safari/8536.25'"}
+    let(:test_headers){{
+      'SERVER_SOFTWARE' => 'Apache/2.2.15 (Linux) Whatever/4.0 PHP/5.2.13',
+      'REQUEST_METHOD' => 'POST',
+      'HTTP_HOST' => 'home.ghita.org',
+      'HTTP_X_REAL_IP' => '1.2.3.4',
+      'HTTP_X_FORWARDED_FOR' => '1.2.3.5',
+      'HTTP_CONNECTION' => 'close',
+      'HTTP_USER_AGENT' => 'Mozilla/5.0 (iPhone; CPU iPhone OS 6_0_1 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A523 Safari/8536.25',
+      'HTTP_ACCEPT' => 'text/vnd.wap.wml, application/json, text/javascript, */*; q=0.01',
+      'HTTP_ACCEPT_LANGUAGE' => 'en-us,en;q=0.5',
+      'HTTP_ACCEPT_ENCODING' => 'gzip, deflate',
+      'HTTP_X_REQUESTED_WITH' => 'XMLHttpRequest',
+      'HTTP_REFERER' => 'http://mobiledetect.net',
+      'HTTP_PRAGMA' => 'no-cache',
+      'HTTP_CACHE_CONTROL' => 'no-cache',
+      'REMOTE_ADDR' => '11.22.33.44',
+      'REQUEST_TIME' => '01-10-2012 07:57'
+    }}
+    let(:detect_with_constructor){
+      MobileDetect.new(test_headers, test_ua)
+    }
+    let(:detect_with_methods){
+      m = MobileDetect.new
+      m.http_headers = test_headers
+      m.user_agent = test_ua
+      m
+    }
+
+    def basic_methods_test(detector)
+      # $this->assertNotEmpty( $this->detect->getUserAgent() );
+      # $this->assertTrue( $this->detect->isMobile() );
+      # $this->assertFalse( $this->detect->isTablet() );
+      # $this->assertTrue( $this->detect->isIphone() );
+      # $this->assertTrue( $this->detect->isiphone() );
+      # $this->assertTrue( $this->detect->isiOS() );
+      # $this->assertTrue( $this->detect->isios() );
+      # $this->assertTrue( $this->detect->is('iphone') );
+      # $this->assertTrue( $this->detect->is('ios') );
+      expect(detector.user_agent).to_not be_empty
+      expect(detector.mobile?).to be_true
+      expect(detector.tablet?).to be_false
+      expect(detector.Iphone?).to be_true
+      expect(detector.iphone?).to be_true
+      expect(detector.ios?).to be_true
+      expect(detector.IoS?).to be_true
+      expect(detector.is?("iphone")).to be_true
+      expect(detector.is?("ios")).to be_true
+    end
+
+    it "can perform basic methods when constructed" do
+      basic_methods_test(detect_with_constructor)
+    end
+
+    it "can perform basic methods when set by methods" do
+      basic_methods_test(detect_with_methods)
+    end
+  end
+
   describe "Testing the User Agent" do
     let(:detector) { MobileDetect.new({})}
     user_agents = JSON.load(File.open("spec/ualist.json", "r"))["user_agents"]

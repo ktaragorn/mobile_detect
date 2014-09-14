@@ -2,17 +2,17 @@ require 'json'
 
 class MobileDetect
   attr_reader :http_headers, :data
-  attr_accessor :user_agent
+  attr_writer :user_agent
 
   # Construct an instance of this class.
   # @param [hash] http_headers Specify the http headers of the request.
   # @param [string] user_agent Specify the User-Agent header. If null, will use HTTP_USER_AGENT
   #                        from the http_headers hash instead.
 
-  def initialize(http_headers, user_agent = nil)
+  def initialize(http_headers = {}, user_agent = nil)
     @data = load_json_data
-    @http_headers = http_headers.select{|header, value| header.start_with? "HTTP_"}
-    @user_agent = user_agent || parse_headers_for_user_agent
+    self.http_headers = http_headers
+    self.user_agent = user_agent
   end
 
   #UNIMPLEMENTED - incomplete data, property hash and utilities hash not provided
@@ -27,6 +27,21 @@ class MobileDetect
   def mobile?
     (check_http_headers_for_mobile or
     match_detection_rules_against_UA)
+  end
+
+  #set the hash of http headers, from env in rails or sinatra
+  #used to get the UA and also to get some mobile headers
+  def http_headers=(env)
+    @http_headers = env.select{|header, value| header.start_with? "HTTP_"}
+  end
+
+  #To access the user agent, retrieved from http_headers if not explicitly set
+  def user_agent
+    @user_agent ||= parse_headers_for_user_agent
+
+    raise "User agent needs to be set before this module can function" unless @user_agent
+
+    @user_agent
   end
 
   #Check if the device is a tablet.
@@ -51,7 +66,7 @@ class MobileDetect
     unless lc_rules[key]
       raise NoMethodError, "Provided key, #{key}, is invalid"
     end
-    binding.pry
+
     match lc_rules[key]
   end
 
