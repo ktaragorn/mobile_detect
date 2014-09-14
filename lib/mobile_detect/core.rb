@@ -15,24 +15,60 @@ class MobileDetect
     @user_agent = user_agent || parse_headers_for_user_agent
   end
 
-
-
   #UNIMPLEMENTED - incomplete data, property hash and utilities hash not provided
   # version , prepareVersionNo
   # mobileGrade
   # detection mode (deprecated in MobileDetect)
 
   #not including deprecated params
+  #Check if the device is mobile.
+  #Returns true if any type of mobile device detected, including special ones
+  #@return bool
   def mobile?
     (check_http_headers_for_mobile or
     match_detection_rules_against_UA)
   end
 
+  #Check if the device is a tablet.
+  #Return true if any type of tablet device is detected.
   #not including deprecated params
+  #@return bool
   def tablet?
     match_detection_rules_against_UA tablets
   end
 
+  # Checks if the device is conforming to the provided key
+  # e.g detector.is?("ios") / detector.is?("androidos") / detector.is?("iphone")
+  # @return bool
+  def is?(key)
+    # Make the keys lowercase so we can match: is?("Iphone"), is?("iPhone"), is?("iphone"), etc.
+    key = key.downcase
+
+    lc_rules = rules.map do |k, v|
+      [k.downcase, v.downcase]
+    end.to_h
+
+    unless lc_rules[key]
+      raise NoMethodError, "Provided key, #{key}, is invalid"
+    end
+    binding.pry
+    match lc_rules[key]
+  end
+
+  # Checks if the device is conforming to the provided key
+  # e.g detector.ios? / detector.androidos? / detector.iphone?
+  # @return bool
+  def method_missing(name, *args, &blk)
+    unless(Array(args).empty?)
+      puts "Args to #{name} method ignored"
+    end
+
+    unless(name[-1] == "?")
+      super
+    end
+
+    is? name[0..-2]
+  end
 
 private
     def load_json_data
@@ -92,7 +128,8 @@ private
     # @return bool
     def match key_regex, ua_string = user_agent
       # Escape the special character which is the delimiter.
-      _, regex = key_regex
+      # _, regex = key_regex
+      regex = Array(key_regex).last # accepts a plain regex or a pair of key,regex
       regex.gsub!("/", "\/")
       !! (ua_string =~ /#{regex}/is)
     end
