@@ -70,14 +70,14 @@ describe MobileDetect do
       # $this->assertTrue( $this->detect->is('iphone') );
       # $this->assertTrue( $this->detect->is('ios') );
       expect(detector.user_agent).to_not be_empty
-      expect(detector.mobile?).to be_true
-      expect(detector.tablet?).to be_false
-      expect(detector.Iphone?).to be_true
-      expect(detector.iphone?).to be_true
-      expect(detector.ios?).to be_true
-      expect(detector.IoS?).to be_true
-      expect(detector.is?("iphone")).to be_true
-      expect(detector.is?("ios")).to be_true
+      expect(detector.mobile?).to be_truthy
+      expect(detector.tablet?).to be_falsey
+      expect(detector.Iphone?).to be_truthy
+      expect(detector.iphone?).to be_truthy
+      expect(detector.ios?).to be_truthy
+      expect(detector.IoS?).to be_truthy
+      expect(detector.is?("iphone")).to be_truthy
+      expect(detector.is?("ios")).to be_truthy
     end
 
     it "can perform basic methods when constructed" do
