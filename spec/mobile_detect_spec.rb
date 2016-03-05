@@ -20,7 +20,7 @@ describe MobileDetect do
 
     # Just to remind me to check data structure
     it "has the keys we expect" do
-      expect(detect.data.keys).to eq(["version","headerMatch","uaHttpHeaders","uaMatch"])
+      expect(detect.data.keys).to include("version","headerMatch","uaHttpHeaders","uaMatch")
     end
 
     it "initializes headers properly," do
