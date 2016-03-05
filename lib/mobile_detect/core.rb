@@ -89,7 +89,7 @@ class MobileDetect
     is? name[0..-2]
   end
 
-private
+protected
     def load_json_data
       File.open(File.expand_path("../../../data/Mobile_Detect.json", __FILE__), "r") do |file|
         JSON.load(file)
@@ -156,7 +156,7 @@ private
     #Find a detection rule that matches the current User-agent.
     #not including deprecated params
     #@return bool
-    def match_detection_rules_against_UA rules = rules
+    def match_detection_rules_against_UA rules = self.rules
       # not sure why the empty check is needed here.. not doing it
       rules.each do |regex|
         return true if match regex
