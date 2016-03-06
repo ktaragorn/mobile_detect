@@ -36,7 +36,7 @@ class MobileDetect
   #set the hash of http headers, from env in rails or sinatra
   #used to get the UA and also to get some mobile headers
   def http_headers=(env)
-    @http_headers = env.select{|header, value| header.start_with? "HTTP_"}
+    @http_headers = env.select {|header, value| header.to_s.start_with? "HTTP_"}
   end
 
   #To access the user agent, retrieved from http_headers if not explicitly set
