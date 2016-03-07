@@ -102,6 +102,18 @@ describe MobileDetect do
         basic_methods_test(detect_with_constructor)
       end
     end
+
+    context 'when user agent contains unicode characters' do
+      it 'does not crash' do
+        user_agent = "Mozilla/5.0 (iPhone; CPU iPhone OS 9_3 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Mobile/13E5225a [FBAN/FBIOS;FBAV/50.0.0.47.191;FBBV/23973043;FBDV/iPad6,8;FBMD/iPad;FBSN/iPhone OS;FBSV/9.3;FBSS/2; FBCR/\u4e2d\u56fd\u8054\u901a;FBID/tablet;FBLC/en_US;FBOP/1]"
+
+        detect = MobileDetect.new({}, user_agent)
+
+        expect do
+          detect.tablet?
+        end.to_not raise_error
+      end
+    end
   end
 
   describe "Testing the User Agent" do

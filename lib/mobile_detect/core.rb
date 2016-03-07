@@ -150,7 +150,7 @@ protected
       # _, regex = key_regex
       regex = Array(key_regex).last # accepts a plain regex or a pair of key,regex
       regex.gsub!("/", "\/")
-      !! (ua_string =~ /#{regex}/is)
+      !! (ua_string =~ /#{regex}/iu)
     end
 
     #Find a detection rule that matches the current User-agent.
