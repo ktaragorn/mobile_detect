@@ -36,7 +36,7 @@ class MobileDetect
   #set the hash of http headers, from env in rails or sinatra
   #used to get the UA and also to get some mobile headers
   def http_headers=(env)
-    @http_headers = env.select{|header, value| header.start_with? "HTTP_"}
+    @http_headers = env.select {|header, value| header.to_s.start_with? "HTTP_"}
   end
 
   #To access the user agent, retrieved from http_headers if not explicitly set
@@ -89,7 +89,7 @@ class MobileDetect
     is? name[0..-2]
   end
 
-private
+protected
     def load_json_data
       File.open(File.expand_path("../../../data/Mobile_Detect.json", __FILE__), "r") do |file|
         JSON.load(file)
@@ -150,13 +150,13 @@ private
       # _, regex = key_regex
       regex = Array(key_regex).last # accepts a plain regex or a pair of key,regex
       regex.gsub!("/", "\/")
-      !! (ua_string =~ /#{regex}/is)
+      !! (ua_string =~ /#{regex}/iu)
     end
 
     #Find a detection rule that matches the current User-agent.
     #not including deprecated params
     #@return bool
-    def match_detection_rules_against_UA rules = rules
+    def match_detection_rules_against_UA rules = self.rules
       # not sure why the empty check is needed here.. not doing it
       rules.each do |regex|
         return true if match regex
